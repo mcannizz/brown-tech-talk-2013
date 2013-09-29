@@ -1,11 +1,12 @@
-# AppDynamics tech talk for Brown, Fall 2013
+# AppDynamics tech talk for Brown
+
+Fall 2013
 
 ## Instructions
 
-- make sure port 8000 is open
-- cd to here
-- python -m SimpleHTTPServer
-- open localhost:8000
+- cd [here]
+- nohup python -m SimpleHTTPServer [some open port] &
+- open http://localhost:[port]
 
 ## License
 
