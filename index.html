@@ -50,7 +50,305 @@
         </section>
 
         <section>
-            <h2>Bad ass technical section slash demo</h2>
+            <h1>Let's build a web app</h1>
+            <h2>TODO: diagram of monolithic app</h2>
+            <aside class="notes">
+                Say you're building a web app. It might start small, but
+                hopefully it will need to grow. You can get bigger and bigger
+                boxes, until you hit the limit of what a single machine can
+                handle. Then what? There's really only one choice: you
+                need to distribute your application across multiple nodes. 
+            </aside>
+        </section>
+
+        <section>
+            <h2>Easier said than done</h2>
+            <h3>TODO: diagram of distributed app</h3>
+            <aside class="notes">
+                Writing a distributed application is not an easy task; there's
+                a completely new set of engineering problems that you'll 
+                need to tackle. Let's talk about one of these many problems:
+                performance.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Why performance matters</h2>
+            <aside class="notes">
+                There's a certain satisfaction in writing efficient, fast code.
+                But fundamentally, why do you need to care about performance?
+                Making good use of the infrastructure and resources that you
+                have is important, but it's not (usually) 
+                the most important thing.
+                Your app exists to solve your users' problems, but users are
+                impatient: if your app is slow, users will abandon it. This
+                problem is particularly bad if users have many alternatives
+                and the cost of switching is low. Think about booking a flight
+                on a travel site. If one site is slow, it's really easy to
+                try one of its competitors instead. If your app is a business,
+                bad performance costs money.
+            </aside>
+        </section>
+
+        <section>
+            <h2>How you can measure performance?</h2>
+            <aside class="notes">
+                Once you realize that you care about performance, you'll want
+                to understand how your app performs by measuring it. How
+                might you go about doing that? It would be reasonable to
+                start by collecting some data from each node your app is
+                running on, like CPU and memory utilization, how often
+                garbage collections are running, and things like that. This
+                is better than nothing, but not by much. Users don't care
+                about any of these things: they care about their experiences.
+                It's almost certainly bad if 5% of your users have a poor
+                experience with your app. Imagine if Google dropped one out of
+                every twenty searches that you ran! But could you detect
+                such a problem by looking at, say, CPU utilization? You'll
+                need a deeper understanding before you can find and fix many
+                types of problems.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Your app is not static</h2>
+            <aside class="notes">
+                Traditionally, applications were deployed only a few times a
+                year, and each deployment was a major event. The rise of the
+                web and distributed applications has made it much easier to
+                deploy more often, so it's not uncommon for developers to
+                deploy new versions of their web apps multiple times in a
+                single week. This is great news for users, who benefit from 
+                new features and bug fixes, but it introduces new problems
+                for performance monitoring. Since your app is constantly
+                changing, your performance monitor needs to be able to
+                quickly adapt to the new environment. A tool that requires
+                lengthy or complex configuration slows you down and is not
+                suitable for modern web application development.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Requirements</h2>
+                <ol>
+                    <li>Distributed</li>
+                    <li>Tells the story as your users experience it</li>
+                    <li>Require minimal manual configuration</li>
+                </ol>
+            <aside class="notes">
+                To recap, we need our performance monitor to be: <br/>
+                    1. Distributed, because your app is. <br/>
+                    2. Monitor your application performance, not the
+                        infrastructure, because your users experience the app.
+                        <br/>
+                    3. Dynamically adapt to changes in your environment,
+                        because you don't have time for configuration.
+                    <br/><br/>
+                    Okay, let's build it!
+            </aside>
+        </section>
+
+        <section>
+            <h1>Telling the story of a request</h1>
+            <aside class="notes">
+                We suspect that infrastructure monitoring is not enough, so
+                how will we measure performance? Your users interact with
+                your app over HTTP, so that's a logical place to start. If
+                we know when a request arrives at your server, and when your
+                server finishes sending the response, that's a decent
+                measure your app's performance from the user's perspective.
+                <br/>
+                You know when requests arrive and when the corresponding
+                responses are sent, so you can identify which requests are
+                slow, or fail outright. This helps you know when your app
+                is having problems, but it doesn't help you in figuring out
+                why. How can we do that?
+                <br/>
+                Remember that your app is distributed, so before your app
+                can respond to the user's request, it probably needs to make
+                some requests of its own to various parts of your backend,
+                receive and process the responses, and then generate the
+                response that your user sees. Let's assume that all this
+                communication happens over HTTP. Can we tie all these related
+                HTTP requests and responses together, so that you can tell
+                the full story of a single user request? What if we could
+                somehow tag related requests with some identifying
+                information?
+            </aside>
+        </section>
+
+        <section>
+            <h1>What we've got to work with</h1>
+                <ol>
+                    <li>HTTP Method</li>
+                    <li>URI</li>
+                    <li>Request Body (maybe)</li>
+                    <li>Headers</li>
+                </ol>
+            <aside class="notes">
+                Each HTTP has these interesting components: <br/>
+                1. The HTTP method, like GET or PUT. <br/>
+                2. The URI, which along with the method, helps you determine
+                    what the user is requesting. <br/>
+                3. The request body, which is optional and could contain
+                    arbitrary data. <br/> 
+                4. The headers, which are essentially a list of key-value
+                    pairs. <br/> <br/>
+
+                If we want to add some data to an HTTP request, headers are
+                attractive, since we can easily add a header with some
+                identifying information without changing the behavior of the
+                rest of the application.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Tag and follow</h2>
+            <h3>TODO: flow map diagram</h3>
+            <aside class="notes">
+                When a request from a user first arrives, start by generating
+                a unique ID for it. At some point, the routine that is
+                processing the user's request may make some requests to other
+                nodes in your application. When this happens, add the unique
+                ID as a header in the request. Using this method, we can
+                discover every HTTP request and response that's involved in
+                servicing a user's request, and if the user's request is
+                slow, or encounters an error, we can determine where the
+                problem lies.<br/><br/>
+                Once you're collecting data like this, you can make statements
+                like "X% of all user requests encountered errors", or "Y%
+                of responses were sent within 100ms". This is the sort of
+                performance information that you need to understand the
+                quality of your users' experiences.<br/><br/>
+                Of course, out in the wild, you'll often find protocols other
+                than HTTP being used in the backend. The same sort of
+                principles apply for other protocols, but we won't get into
+                the details today.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Implementation</h2>
+            <aside class="notes">
+                Now that we know what we want to do, how can we do it? You
+                could write code in each part of your app that handles or
+                makes HTTP requests that passes these identifiers between
+                requests. It would be fairly straightforward, but tedious
+                and error-prone. Worst of all, it makes it hard to add new
+                code and nearly impossible to integrate a third party library.
+                So what we can do?
+            </aside>
+        </section>
+
+        <section>
+            <h2>How your code runs</h2>
+            <aside class="notes">
+                For argument's sake, let's assume that your app is written
+                in Java. It starts out as source code, which the Java compiler
+                transforms into Java byte code during compilation. When it's
+                time to run your program, you can't just run the byte code
+                as is; your CPU doesn't understand byte code. So the Java
+                Virtual Machine does another transformation, this time turning
+                the byte code into native machine code. You'll recall that this
+                step is called just-in-time compilation, or JITing.<br/><br/>
+                
+                Usually each step of this process preserves the behavior of
+                your code, but you certainly could imagine a transformation
+                that doesn't. A compiler or JIT that performed such a
+                transformation would be considered buggy, but if you were
+                careful, you could transform code in a way that 
+                changes its behavior in a useful way while not interfering
+                with the purpose of the program.<br/><br/>
+
+                In theory, you could do your code transformation on either
+                the source code, the byte code, or the machine code. Changing
+                the source code would be a nightmare for the app developers,
+                and doing machine code transformations would require altering
+                the JVM and result in an implementation that's dependent
+                on CPU architecture, so neither is particularly interesting.
+                Java byte code, on the other hand, can be altered transparently,
+                as far as developers are concerned, and by definition, is
+                independent of any specific CPU architecture.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Instrumenting an app</h2>
+			<pre><code data-trim contenteditable>
+public void sendHttpRequest(HttpRequest request) {
+    ...
+}
+			</code></pre>
+            <aside class="notes">
+                Let's say that the method that implements HTTP requests in
+                your app looks something like this. Since few apps
+                re-implement this functionality from scratch, this method
+                is probably part of a library. In order to instrument it,
+                we need to transform the body of the method from this, into...
+            </aside>
+        </section>
+
+        <section>
+            <h2>Instrumenting an app</h2>
+			<pre><code data-trim contenteditable>
+public void sendHttpRequest(HttpRequest request) {
+    beginHttpRequest(request); 
+    ...
+    endHttpRequest(request); 
+}
+			</code></pre>
+            <aside class="notes">
+                ... this. We can use a technique called byte code injection
+                to perform this transformation at runtime. Here's how it works:
+                when the JVM is running a program and it needs to find the
+                definition of a class, it uses a special sort of object
+                called a class loader. The JVM provides an API to hook into
+                the class loading process so that your code is called after
+                a class loader has found the definition of a class, but
+                before that class's definition is available to the rest of
+                the program. We use this opportunity to examine 
+                the class being loaded, and if it happens to be a class that
+                we are interested in instrumenting, we write new byte code
+                into the bodies of its methods. <br/> <br/>
+
+                Now that we are running instrumentation code at the beginning
+                and end of each interesting method, we can keep track of how
+                long each HTTP request takes, and write identifying information
+                into the request headers as well. This is all we need to
+                implement the tag and follow scheme for instrumenting HTTP.
+                <br/> <br/>
+
+                This technique is fundamentally straightforward, but since
+                our instrumentation code runs within the program being
+                monitored, this part of our system, called the agent, needs
+                to be thoughtfully engineered and tested. If the agent is
+                buggy, it's very possible for it to bring an application down,
+                which obviously defeats the whole purpose. Since the agents
+                monitor apps in production, they also need to keep overhead
+                to a minimum: we generally promise our customers no more than
+                2% overhead on average. AppDynamics has agents for Java,
+                .NET, PHP, and Javascript, and we will shortly have node.js,
+                Android, and iOS agents as well. These agents work in
+                different ways, but the goals and principles are similar.
+            </aside>
+        </section>
+
+        <section>
+            <h1>Making sense of the data</h1>
+            <aside class="notes">
+                In a production environment, there are many agents reporting
+                quite a large amount of data. This means that we need to have
+                a scalable way of collecting and aggregating all this data,
+                and also need to have effective visualizations to help
+                our users make sense of it. Let me show you our product and
+                demo some of the basic features.
+
+                Demo should cover: <br/>
+                1. Flow map <br/>
+                2. BTs <br/>
+                3. Snapshots <br/>
+                4. EUM <br/>
+            </aside> 
         </section>
 
         <section>
