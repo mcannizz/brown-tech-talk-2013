@@ -35,6 +35,21 @@
             <h1>Making sense of big applications</h1>
             <h3>with AppDynamics</h3>
             <p>Matt Cannizzaro '08, Adam Cath '07</p>
+            <aside class="notes">
+                Suppose you were put in charge of operations at NetFlix.
+                How would you manage it?
+                Well, NetFlix is not just one big program like your CS32 project.
+                If you manage NetFlix, you manage hundreds of different services,
+                running on 10,000 machines, bursting up to 15,000, all running in Amazon's cloud.
+                How would you know if it was working or broken? Or just slow?
+                How would you know if your users were having a good experience?
+
+                I'm Adam Cath, this is Matt Cannizzaro. We work at AppDynamics,
+                and we help people run really big and complicated applications.
+
+                We're going to spend most of this talk on technical stuff,
+                but I just want to give you a little more context about our company first.
+            </aside>
         </section>
 
         <section>
@@ -43,6 +58,7 @@
                 <li>Started in 2008</li>
                 <li>Downtown SF</li>
                 <li>300 employees</li>
+                <li>Help wanted!</li>
             </ul>
             <img src="images/appman.png"
                  style="float: right; background: none; border: none; box-shadow: none"/>
@@ -65,6 +81,7 @@
             <h3>Easier said than done</h3>
             <img src="images/dist-app.png"
                  style="float: center; background: none; border: none; box-shadow: none;"/>
+            <div style="margin-top:-50px"><h3>(&#9583;&#176;&#9633;&#176;&#65289;&#9583;&#65077; &#9531;&#9473;&#9531;</h3></div>
             <aside class="notes">
                 Writing a distributed application is not an easy task; there's
                 a completely new set of engineering problems that you'll 
@@ -398,28 +415,38 @@ public void sendHttpRequest(Request request) {
             <h1>Unsolicited advice</h1>
             <p>Or, some things that you probably don't think matter, <br/>but actually really do matter.</p>
             <aside class="notes">
-                Besides telling you about AppDynamics, Matt and I thought it would be nice to give you something more generally useful.
+                Besides telling you about AppDynamics, Matt and I thought
+                it would be nice to give you something more generally useful.
 
-                Five or six years ago we were in the same position that you're in now: finishing up our studies and deciding what to do next.
+                We thought we could give you some unsolicited advice for your
+                first year after college.
 
-                In the intervening years, we've each learned that certain things turned out to be far more important than expected.
-                Things that if we had known them earlier, would have helped us grow faster as engineers.
-                So I'd like to share those with you. And I welcome discussion during this part, so please interrupt me if you have questions.
+                You might be thinking "why the hell should I listen to this guy?
+                He's just some alum from five years ago recruting for some random company!"
+
+                Which is totally reasonable. I don't expect you to just take my word
+                on this stuff. Instead, listen to my arguments and see if you're convinced.
+
+                And I welcome discussion during this part, so please interrupt me
+                if you have questions.
             </aside>
         </section>
 
         <section>
             <h2>1) Do code reviews</h2>
             <aside class="notes">
-                This one seems small, but it's a really big deal.<br/>
+                Getting your code reviewed makes you a better programmer, for the same reason that
+                getting your essays graded makes you a better writer. This one is pretty simple.
+
+                But there's also a huge benefit for the reviewer. Who here is or has been an
+                undergrad TA or head TA? Remember how much better you learned the material
+                when you TA'ed the class than whan you took it originally? Reviewing code is like that.
+                It makes you engage with the material on a deeper level. It expands your perspective
+                and forces you to re-examine your beliefs about what good code is.
 
                 At Adobe, we rarely did code reviews. At AppDynamics, we do them on every commit.
                 As a direct consequence of that, I have learned more about writing clear and correct
                 code in the last 9 months at AppDynamics than I did in the previous 5 years at Adobe.<br/>
-
-                Getting your code reviews will make you write better code, but just as important,
-                reviewing other people's code will expand your perspective and force you to examine your beliefs
-                about what good code is. It's kinda like what people say about college.<br/>
 
                 When you interview, ask about code reviews. It's very diagnostic. A culture that does code reviews
                 is a culture that values quality and craftsmanship. That's the kind of place where you're really going
@@ -435,32 +462,39 @@ public void sendHttpRequest(Request request) {
                 a dead technology. When we applied to our next jobs, we basically had to apologize for that.
                 So one obvious tip is: don't waste time on dead technology.<br/>
 
-                But there's a subtler issue too, which is around proprietary technology. All the reasons that
-                people don't like to USE proprietary technology apply 10x when it comes to LEARNING proprietary
-                technology. It can be very interesting and powerful stuff, but it has virtually no value
-                when you look for your second job.<br/>
+                But there's a subtler issue too, which is proprietary technology - technology that is owned and
+                maintained only by one group of people. All the reasons that people don't like to USE proprietary
+                technology apply at least twofold when it comes to LEARNING proprietary technology. Proprietary
+                knowledge is by definition not useful outside of a very small context.
+                That means it has virtually no value when you look for your second job.
+                I know you're all focused on your first job right now, but you should always keep in mind how your first
+                job is going to prepare you for your second job.<br/>
 
                 Now, you might think "isn't it more important that I learn transferable skills, ideas, and principles?"
-                Yes, of course that is important. But knowing specific technologies also has significant value
-                (which will compound over the course of your career), so don't ignore it.<br/>
+                Yes, of course that's more important. But when you only know Adobe- or Google- or Facebook-specific
+                libraries, you are a little bit boxed in. If you know all the industry-standards, on the other hand,
+                you're like a code McGuyver: when you non-technical friend comes along with some startup idea,
+                you can just make it happen.<br/>
 
-                This one is pretty hard to avoid if you work at a big company. At most big companies, you will likely
-                be surrounded by layers of proprietary software in every direction. Small companies don't have the luxury
-                to indulge in "not invented here" syndrome.<br/>
+                I have to say that it's pretty hard to avoid proprietary knowledge at a big company.
+                At most big companies, you will be surrounded by layers of proprietary software in every direction.
+                Small companies just haven't been around long enough to accumulate that. They also don't have the
+                luxury to indulge in "not invented here" syndrome.<br/>
 
-                Here I need to make a plug for AppDynamics specifically. If you work at Facebook, you can learn how
-                Facebook's amazing PHP VM works. If you work at Google, you can learn how about Google's insanely
-                scalable database works. But if you work at AppDynamics, you'll learn about how NetFlix works,
-                how Williams-Sonoma works, how OpenTable works, how Roku works. Because our job is to undestand,
-                and help our customers understand, how these very complex and interesting apps really work.<br/>
+                I also need to make a plug for AppDynamics specifically. Facebook has this amazing VM for running
+                PHP code super fast. If you work at Facebook, you can learn how that works. If you work at Google,
+                you can learn how about Google's insanely scalable database works. But if you work at AppDynamics,
+                you can learn about how NetFlix works, how Williams-Sonoma works, how OpenTable works, how Roku works.
+                Because our job is to undestand, and help our customers understand, how these big apps really work.
+                It doesn't get much more generally-applicable than that!<br/>
             </aside>
         </section>
 
         <section>
             <h2>3) Get real feedback</h2>
             <aside class="notes">
-                The first product I worked on at Adobe was really cool. We talked to potential customers, and they
-                thought it was cool. In fact, I demoed it in this very room a few years ago, and you guys (or
+                The first product I worked on at Adobe was really cool. We talked to potential customers and they
+                thought it was cool. In fact, I demoed it in this very building a few years ago, and you guys (or
                 your predecessors) thought it was cool too. We worked hard on it for 3 years and shipped it.
                 Then we found out there was no real market for it because it didn't <i>really</i> fit into
                 anyone's workflow.<br/>
@@ -470,27 +504,24 @@ public void sendHttpRequest(Request request) {
                 workflow.<br/>
 
                 On my second product, we did it right. We shipped a working version (with a limited feature set)
-                three months after we started thep roject. And people <i>actually</i>
+                three months after we started the project. And people <i>actually</i>
                 started using it. They filed bugs! They made feature requests. And we added the things they wanted.
                 And we got more users. And it was glorious.<br/>
 
-                I came to believe that the only feedback that's really worth anything is people really using
-                your software for their real work.<br/>
-
-                I had an interesting experience at AppDynamics that changed my perspective again. Shortly after
-                we shipped my first product, my team was in a meeting with the founders and the VP of engineering,
+                I had an interesting experience at AppDynamics that expanded my perspective again. Shortly after
+                we shipped my product, my team was in a meeting with the founders and the VP of engineering,
                 deciding what to work on next. There were two broad possibilities: features that would make the product
-                more useful (since it is fairly bare-bones), and features that would allow us to charge people to
+                more useful (since it was fairly limited), and features that would allow us to charge people to
                 use the product. I said "I think we should focus on making the product useful before worrying about
-                charging for it. Once we have something we know is valuable, we can charge for it." Jyoti, our CEO
+                charging for it. Once we have something we know is valuable, then we can charge for it." Jyoti, our CEO
                 (who is also an engineer), replied "How will we know if it's valuable if nobody is paying for it?"<br/>
 
-                That really made me think. He had a point: people who are using a free product will not necessarily
-                give you the feedback you need to make a product somebody is willing to pay for.<br/>
+                At first that struck me as just really really...capitalistic. But as I thought about it, I realized
+                he had a point: people who are using a free product will not necessarily give you the feedback you need
+                to make a product somebody is willing to pay for.<br/>
 
-                Now, I'm sure there is no "one true way" to develop and charge for your product, but if you want
-                customer feedback to help guide your decisions, you need to think hard about how to get the right
-                feedback.<br/>
+                Now, I'm not saying this is the only way to do it. What I am saying is that if you want customer
+                feedback to help guide your decisions, you need to think hard about how to get the right feedback.<br/>
             </aside>
         </section>
 
@@ -499,21 +530,21 @@ public void sendHttpRequest(Request request) {
             <p>Sorry, this means money.</p>
             <p>Full-stack visibility.</p>
             <aside class="notes">
-                If you don't mind your project getting cancelled every few years, you can ignore this section.<br/>
-
-                When I looked for my first job, I thought "I want to work on hard problems that improve the world
-                with smart people". And most of my friends had the same criteria. It's very tempting to not worry
-                too much about the business. But there are some business considerations that can have a material
-                impact on your career.<br/>
+                When I looked for my first job, I thought "I want to work on hard problems  with smart people, and maybe
+                do something that improves the world". And most of my friends had the same criteria. It's very tempting
+                to not worry too much about the business. But there are some business considerations that can have a
+                material impact on your career.<br/>
 
                 First, a very harsh reality: if you're not working on something that generates revenue, your project
                 is expendable. It doesn't matter what your manager says. It doesn't matter if the CTO is coming around
-                your cube every week to check on the status. If it doesn't solve some real problems for some real people who know they have these problems and are
-                willing to pay you to solve them, it is a slave the fickle winds of company strategy. The CTO gets
-                pushed out of the company for political reasons, and the new CTO doesn't understand the value of your
-                product.<br/>
+                your cube every week to check on the status. If it doesn't solve some real problems for some real people
+                who know they have these problems and are willing to pay you to solve them, it is a ship adrift on the
+                fickle seas of corporate strategy. Maybe the CTO gets pushed out of the company for some reason, and the
+                new CTO doesn't understand the value of your product. Maybe the CEO can't figure out how to justify
+                the cost on the quarterly earnings call. There are a thousand ways for a product to die. But if it's
+                solving real problems for real customers and making money...it has much better chances.<br/>
 
-                Second: It's really valuable talk to non-engineers on a regular basis.
+                Second: it's really valuable talk to non-engineers on a regular basis.
                 If you don't talk to the sales team, you really don't know anything about your business.
                 The same goes for operations, customer support, and marketing.
                 This will make you better at your job. It will make you more valuable to the company.
@@ -523,38 +554,22 @@ public void sendHttpRequest(Request request) {
 
                 Both of these are also much easier to do in small companies. Most small companies don't have the luxury
                 of working on non-business-critical things for any length of time. And in a small company, you'll be
-                surrounded by non-engineers simply because there aren't enough engineers to buffer you from them.
-            </aside>
-        </section>
-
-        <section>
-            <h2>5) Think about your second job</h2>
-            <aside class="notes">
-                Right now, you're probably focused on getting your first job. To me, that first job felt like a sort of
-                information event horizon: it was simply impossible to know what would happen after I started that job.
-                Kinda like the first day of college.<br/>
-
-                And it's true. It's hard to know where tech will be in five years, or where your interests will
-                lie, but one thing is pretty certain: you'll probably stay at your first job for a few years,
-                and then move on to something else.<br/>
-
-                The things you do and learn (and, of course, the people you meet) in your first job will get you your
-                second job.<br/>
-
-                So when you're sifting through your many job offers, in addition to looking for something interesting
-                and fulfilling, ask yourself "am I going to learn stuff that will make me more valuable for my second job?"<br/>
+                surrounded by non-engineers simply because there aren't enough engineers to buffer you from them.<br/>
             </aside>
         </section>
 
         <section>
             <h3>Pro tips summary:</h3>
             <ul>
-                <li>Think about your second job</li>
                 <li>Stay close to the business</li>
                 <li>Get real feedback</li>
                 <li>Learn tech that transfers</li>
                 <li>Do code reviews</li>
             </ul>
+        </section>
+
+        <section>
+            <h1>Viktor!</h1>
         </section>
 
         <section data-background="#14a45c">
