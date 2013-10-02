@@ -50,8 +50,9 @@
         </section>
 
         <section>
-            <h1>Let's build a web app</h1>
-            <h2>TODO: diagram of monolithic app</h2>
+            <h2>Let's build a web app</h2>
+            <img src="images/mono-app.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
             <aside class="notes">
                 Say you're building a web app. It might start small, but
                 hopefully it will need to grow. You can get bigger and bigger
@@ -62,8 +63,9 @@
         </section>
 
         <section>
-            <h2>Easier said than done</h2>
-            <h3>TODO: diagram of distributed app</h3>
+            <h3>Easier said than done</h3>
+            <img src="images/dist-app.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
             <aside class="notes">
                 Writing a distributed application is not an easy task; there's
                 a completely new set of engineering problems that you'll 
@@ -73,7 +75,7 @@
         </section>
 
         <section>
-            <h2>Why performance matters</h2>
+            <h3>Why performance matters</h3>
             <aside class="notes">
                 There's a certain satisfaction in writing efficient, fast code.
                 But fundamentally, why do you need to care about performance?
@@ -91,7 +93,7 @@
         </section>
 
         <section>
-            <h2>How you can measure performance?</h2>
+            <h3>How you can measure performance?</h3>
             <aside class="notes">
                 Once you realize that you care about performance, you'll want
                 to understand how your app performs by measuring it. How
@@ -111,7 +113,7 @@
         </section>
 
         <section>
-            <h2>Your app is not static</h2>
+            <h3>Your app is not static</h3>
             <aside class="notes">
                 Traditionally, applications were deployed only a few times a
                 year, and each deployment was a major event. The rise of the
@@ -129,7 +131,7 @@
         </section>
 
         <section>
-            <h2>Requirements</h2>
+            <h3>Requirements</h3>
                 <ol>
                     <li>Distributed</li>
                     <li>Tells the story as your users experience it</li>
@@ -149,7 +151,7 @@
         </section>
 
         <section>
-            <h1>Telling the story of a request</h1>
+            <h2>Telling the story of a request</h2>
             <aside class="notes">
                 We suspect that infrastructure monitoring is not enough, so
                 how will we measure performance? Your users interact with
@@ -178,22 +180,26 @@
         </section>
 
         <section>
-            <h1>What we've got to work with</h1>
-                <ol>
-                    <li>HTTP Method</li>
-                    <li>URI</li>
-                    <li>Request Body (maybe)</li>
-                    <li>Headers</li>
-                </ol>
+            <h3>What we've got to work with</h3>
+			<pre><code data-trim contenteditable>
+GET /dumprequest HTTP/1.1
+Host: djce.org.uk
+Connection: keep-alive
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.76 Safari/537.36
+Referer: https://www.google.com/
+Accept-Language: en-US,en;q=0.8
+			</code></pre>
             <aside class="notes">
-                Each HTTP has these interesting components: <br/>
+                Here's an example of an HTTP request. It has these interesting
+                components: <br/>
                 1. The HTTP method, like GET or PUT. <br/>
                 2. The URI, which along with the method, helps you determine
                     what the user is requesting. <br/>
-                3. The request body, which is optional and could contain
-                    arbitrary data. <br/> 
-                4. The headers, which are essentially a list of key-value
-                    pairs. <br/> <br/>
+                3. The headers, which are essentially a list of key-value
+                    pairs. <br/> 
+                4. The request body, which is optional and could contain
+                    arbitrary data. <br/> <br/>
 
                 If we want to add some data to an HTTP request, headers are
                 attractive, since we can easily add a header with some
@@ -203,8 +209,9 @@
         </section>
 
         <section>
-            <h2>Tag and follow</h2>
-            <h3>TODO: flow map diagram</h3>
+            <h3>Tag and follow</h3>
+            <img src="images/flow-map.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
             <aside class="notes">
                 When a request from a user first arrives, start by generating
                 a unique ID for it. At some point, the routine that is
@@ -215,11 +222,6 @@
                 servicing a user's request, and if the user's request is
                 slow, or encounters an error, we can determine where the
                 problem lies.<br/><br/>
-                Once you're collecting data like this, you can make statements
-                like "X% of all user requests encountered errors", or "Y%
-                of responses were sent within 100ms". This is the sort of
-                performance information that you need to understand the
-                quality of your users' experiences.<br/><br/>
                 Of course, out in the wild, you'll often find protocols other
                 than HTTP being used in the backend. The same sort of
                 principles apply for other protocols, but we won't get into
@@ -228,10 +230,50 @@
         </section>
 
         <section>
-            <h2>Implementation</h2>
+            <h3>Implementation</h3>
+			<pre><code data-trim contenteditable>
+public void send(Request req)
+{
+   if (Profiler.isInTransaction()) {
+       // We are a middle node in a distributed transaction.
+       requestID = Profiler.getCurrentTransactionID()
+   } else {
+       // We are the root node of a distributed transaction.
+       requestID = Profiler.createTransactionID()
+   }
+   long startT = System.nanoTime()
+   req.addHeader("REQUEST_ID", requestID)
+
+   ...
+
+   long endT = System.nanoTime()
+   Profiler.reportRequest(req, endT - startT, requestID)
+}
+			</code></pre>
             <aside class="notes">
+                Let's take a quick look at the implementation of the
+                algorithm we just described. Here's the code we'd need to
+                add to the routine that sends requests to tag outgoing
+                requests.
+            </aside>
+        </section>
+
+        <section>
+            <h3>Implementation</h3>
+			<pre><code data-trim contenteditable>
+public void receive(Request req, Response res)
+{
+    if (req.hasHeader("REQUEST_ID"))
+        Profiler.setCurrentTransaction(req.getHeader("REQUEST_ID"))
+    ...
+}
+			</code></pre>
+            <aside class="notes">
+                And here's the code we'd need to add to the routine that
+                handles incoming requests. <br/> <br/>
+
                 Now that we know what we want to do, how can we do it? You
-                could write code in each part of your app that handles or
+                could write this code in each part of your app that handles or
                 makes HTTP requests that passes these identifiers between
                 requests. It would be fairly straightforward, but tedious
                 and error-prone. Worst of all, it makes it hard to add new
@@ -241,7 +283,9 @@
         </section>
 
         <section>
-            <h2>How your code runs</h2>
+            <h3>How your code runs</h3>
+            <img src="images/code.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
             <aside class="notes">
                 For argument's sake, let's assume that your app is written
                 in Java. It starts out as source code, which the Java compiler
@@ -273,9 +317,9 @@
         </section>
 
         <section>
-            <h2>Instrumenting an app</h2>
+            <h3>Instrumenting an app</h3>
 			<pre><code data-trim contenteditable>
-public void sendHttpRequest(HttpRequest request) {
+public void sendHttpRequest(Request request) {
     ...
 }
 			</code></pre>
@@ -289,12 +333,12 @@ public void sendHttpRequest(HttpRequest request) {
         </section>
 
         <section>
-            <h2>Instrumenting an app</h2>
+            <h3>Instrumenting an app</h3>
 			<pre><code data-trim contenteditable>
-public void sendHttpRequest(HttpRequest request) {
-    beginHttpRequest(request); 
+public void sendHttpRequest(Request request) {
+    Profiler.beginHttpRequest(request); 
     ...
-    endHttpRequest(request); 
+    Profiler.endHttpRequest(request); 
 }
 			</code></pre>
             <aside class="notes">
