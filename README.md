@@ -1,6 +1,6 @@
 # AppDynamics tech talk for Brown
 
-Fall 2013
+Fall 2017
 
 ## Instructions
 
@@ -10,4 +10,4 @@ Fall 2013
 
 ## License
 
-Copyright (C) 2013 AppDynamics
+Copyright (C) 2017 AppDynamics
