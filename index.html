@@ -34,17 +34,17 @@
         <section>
             <h1>Making sense of big applications</h1>
             <h3>with AppDynamics</h3>
-            <p>Matt Cannizzaro '08, Adam Cath '07</p>
+            <p>Evan Fuller '16, Matt Cannizzaro '08</p>
             <aside class="notes">
-                Suppose you were put in charge of operations at NetFlix.
+                Suppose you were put in charge of operations at a major bank.
                 How would you manage it?
-                Well, NetFlix is not just one big program like your CS32 project.
-                If you manage NetFlix, you manage hundreds of different services,
-                running on 10,000 machines, bursting up to 15,000, all running in Amazon's cloud.
+                Well, a bank is not just one big program like your CS32 project.
+                If you manage it, you manage hundreds of different services,
+                running on thousands of separate machines, maybe running in another company's cloud.
                 How would you know if it was working or broken? Or just slow?
                 How would you know if your users were having a good experience?
 
-                I'm Adam Cath, this is Matt Cannizzaro. We work at AppDynamics,
+                I'm Evan Fuller, this is Matt Cannizzaro. We work at AppDynamics,
                 and we help people run really big and complicated applications.
 
                 We're going to spend most of this talk on technical stuff,
@@ -57,7 +57,8 @@
             <ul>
                 <li>Started in 2008</li>
                 <li>Downtown SF</li>
-                <li>300 employees</li>
+                <li>1400+ employees</li>
+		<li>Acquired by Cisco in March</li>
                 <li>Help wanted!</li>
             </ul>
             <img src="images/appman.png"
@@ -415,14 +416,14 @@ public void sendHttpRequest(Request request) {
             <h1>Unsolicited advice</h1>
             <p>Or, some things that you probably don't think matter, <br/>but actually really do matter.</p>
             <aside class="notes">
-                Besides telling you about AppDynamics, Matt and I thought
+                Besides telling you about AppDynamics, Evan and I thought
                 it would be nice to give you something more generally useful.
 
                 We thought we could give you some unsolicited advice for your
                 first year after college.
 
                 You might be thinking "why the hell should I listen to this guy?
-                He's just some alum from five years ago recruting for some random company!"
+                He's just some alum from years ago recruting for some random company!"
 
                 Which is totally reasonable. I don't expect you to just take my word
                 on this stuff. Instead, listen to my arguments and see if you're convinced.
@@ -442,11 +443,7 @@ public void sendHttpRequest(Request request) {
                 undergrad TA or head TA? Remember how much better you learned the material
                 when you TA'ed the class than whan you took it originally? Reviewing code is like that.
                 It makes you engage with the material on a deeper level. It expands your perspective
-                and forces you to re-examine your beliefs about what good code is.
-
-                At Adobe, we rarely did code reviews. At AppDynamics, we do them on every commit.
-                As a direct consequence of that, I have learned more about writing clear and correct
-                code in the last 9 months at AppDynamics than I did in the previous 5 years at Adobe.<br/>
+                and forces you to re-examine your beliefs about what good code is.<br/>
 
                 When you interview, ask about code reviews. It's very diagnostic. A culture that does code reviews
                 is a culture that values quality and craftsmanship. That's the kind of place where you're really going
@@ -458,8 +455,8 @@ public void sendHttpRequest(Request request) {
             <h2>2) Learn tech that transfers</h2>
             <p>Not proprietary stacks.</p>
             <aside class="notes">
-                One of the reasons that both Matt and I left Adobe is that we had become experts on Flash, which is
-                a dead technology. When we applied to our next jobs, we basically had to apologize for that.
+                I used to work at Adobe, and one of the reasons I left is that I had become an expert on Flash, which is
+                a dead technology. When I applied to my next job, I basically had to apologize for that.
                 So one obvious tip is: don't waste time on dead technology.<br/>
 
                 But there's a subtler issue too, which is proprietary technology - technology that is owned and
@@ -484,7 +481,7 @@ public void sendHttpRequest(Request request) {
                 I also need to make a plug for AppDynamics specifically. Facebook has this amazing VM for running
                 PHP code super fast. If you work at Facebook, you can learn how that works. If you work at Google,
                 you can learn how about Google's insanely scalable database works. But if you work at AppDynamics,
-                you can learn about how NetFlix works, how Williams-Sonoma works, how OpenTable works, how Roku works.
+                you can learn about how TiVo works, how Nasdaq works, how Expedia works, how Okta works.
                 Because our job is to undestand, and help our customers understand, how these big apps really work.
                 It doesn't get much more generally-applicable than that!<br/>
             </aside>
@@ -494,8 +491,7 @@ public void sendHttpRequest(Request request) {
             <h2>3) Get real feedback</h2>
             <aside class="notes">
                 The first product I worked on at Adobe was really cool. We talked to potential customers and they
-                thought it was cool. In fact, I demoed it in this very building a few years ago, and you guys (or
-                your predecessors) thought it was cool too. We worked hard on it for 3 years and shipped it.
+                thought it was cool. We worked hard on it for 3 years and shipped it.
                 Then we found out there was no real market for it because it didn't <i>really</i> fit into
                 anyone's workflow.<br/>
 
@@ -503,7 +499,7 @@ public void sendHttpRequest(Request request) {
                 totally use that!" It's a totally different thing to actually break your habits and change your
                 workflow.<br/>
 
-                On my second product, we did it right. We shipped a working version (with a limited feature set)
+                On my product at AppDynamics, we did it right. We shipped a working version (with a limited feature set)
                 three months after we started the project. And people <i>actually</i>
                 started using it. They filed bugs! They made feature requests. And we added the things they wanted.
                 And we got more users. And it was glorious.<br/>
@@ -513,7 +509,7 @@ public void sendHttpRequest(Request request) {
                 deciding what to work on next. There were two broad possibilities: features that would make the product
                 more useful (since it was fairly limited), and features that would allow us to charge people to
                 use the product. I said "I think we should focus on making the product useful before worrying about
-                charging for it. Once we have something we know is valuable, then we can charge for it." Jyoti, our CEO
+                charging for it. Once we have something we know is valuable, then we can charge for it." Jyoti, our founder
                 (who is also an engineer), replied "How will we know if it's valuable if nobody is paying for it?"<br/>
 
                 At first that struck me as just really really...capitalistic. But as I thought about it, I realized
@@ -537,7 +533,7 @@ public void sendHttpRequest(Request request) {
 
                 First, a very harsh reality: if you're not working on something that generates revenue, your project
                 is expendable. It doesn't matter what your manager says. It doesn't matter if the CTO is coming around
-                your cube every week to check on the status. If it doesn't solve some real problems for some real people
+                your desk every week to check on the status. If it doesn't solve some real problems for some real people
                 who know they have these problems and are willing to pay you to solve them, it is a ship adrift on the
                 fickle seas of corporate strategy. Maybe the CTO gets pushed out of the company for some reason, and the
                 new CTO doesn't understand the value of your product. Maybe the CEO can't figure out how to justify
@@ -569,7 +565,10 @@ public void sendHttpRequest(Request request) {
         </section>
 
         <section>
-            <h1>Viktor!</h1>
+            <h1>Cisco</h1>
+	        <aside class="notes">
+                
+	        </aside>
         </section>
 
         <section data-background="#14a45c">
