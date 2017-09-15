@@ -57,7 +57,7 @@
             <ul>
                 <li>Started in 2008</li>
                 <li>Downtown SF</li>
-                <li>1400+ employees</li>
+                <li>1400+ employees (300+ engineers)</li>
 		<li>Acquired by Cisco in March</li>
                 <li>Help wanted!</li>
             </ul>
@@ -86,19 +86,62 @@
             <aside class="notes">
                 Writing a distributed application is not an easy task; there's
                 a completely new set of engineering problems that you'll 
-                need to tackle. Let's talk about one of these many problems:
-                performance.
+                need to tackle. Soon, we'll talk about one of the most important
+                of these many problems: performance. But first, we'll examine a
+                few real-world examples of distributed applications.
+            </aside>
+        </section>
+
+        <section>
+            <h3>Airbnb</h3>
+            <img src="images/airbnb-aws.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
+            <aside class="notes">
+                (https://aws.amazon.com/solutions/case-studies/airbnb/)
+
+                From this screenshot from AWS Re-Invent 2013, you can see the myriad of services
+                that Airbnb deploys throughout their tech stack. They deploy EC2 instances for serving content,
+                multiple types of storage (SQL and NoSQL), and object storage. As of 2013, they deployed over 1,000
+                EC2 instances for serving web content, and 50 TB worth of photos in S3.
+ 
+                Nathan Blecharczyk:
+                "pretty much any time we can use an AWS instance to solve a problem, we will, so that we don't have to solve that problem ourselves"
+
+                It is clear that over the past several years, an increasing number of companies have shifted their
+                perspectives to rely on collections of external web services from AWS. The increasingly complicated
+                topology of an application is what necessitates AppDynamics.
+            </aside>
+        </section>
+
+        <section>
+            <h3>MLB</h3>
+            <img src="images/mlb-aws.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
+            Player Tracking System
+            <aside class="notes">
+                (https://aws.amazon.com/solutions/case-studies/major-league-baseball-mlbam/)
+
+                As one last example of an application's topology, examine MLB's Player Tracking System. This system
+                collects data tracking the position of the ball and players every game of the season, which in
+                aggregate represents 7 TB per game, or 17 PB per season. The system is implemented across so many
+                components in order to handle many use cases: for example, ElastiCache is used for caching large
+                chunks of data in memory while performing compute-heavy analysis tasks.
+
+                Keep in mind, the screenshot on this slide only shows the topology for the set of use cases I've just
+                gone over here. Every other project managed by MLB Advanced Media likely has similarly complex systems.
             </aside>
         </section>
 
         <section>
             <h3>Why performance matters</h3>
+            <img src="images/2017-akamai-report.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
+            <p style="font-size: 14px; float: right;"> * courtesy of Akamai Online Retail Performance Report, 2017</p>
             <aside class="notes">
                 There's a certain satisfaction in writing efficient, fast code.
                 But fundamentally, why do you need to care about performance?
                 Making good use of the infrastructure and resources that you
-                have is important, but it's not (usually) 
-                the most important thing.
+                have is important, but it's not (usually) the most important thing.
                 Your app exists to solve your users' problems, but users are
                 impatient: if your app is slow, users will abandon it. This
                 problem is particularly bad if users have many alternatives
@@ -106,6 +149,18 @@
                 on a travel site. If one site is slow, it's really easy to
                 try one of its competitors instead. If your app is a business,
                 bad performance costs money.
+
+                Highlights from the Akamai report included here indicate that
+                users expect the apps they are using to be responsive on the
+                resolution of a few seconds.
+            </aside>
+        </section>
+        <section>
+            <!-- TODO: fix the image quality here -->
+            <img src="images/2011-load-time-stats.jpg"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
+            <aside class="notes">
+                TODO (emf)
             </aside>
         </section>
 
@@ -131,6 +186,8 @@
 
         <section>
             <h3>Your app is not static</h3>
+            <img src="images/ci-cd-pipeline.png"
+                 style="float: center; background: none; border: none; box-shadow: none;"/>
             <aside class="notes">
                 Traditionally, applications were deployed only a few times a
                 year, and each deployment was a major event. The rise of the
@@ -423,7 +480,7 @@ public void sendHttpRequest(Request request) {
                 first year after college.
 
                 You might be thinking "why the hell should I listen to this guy?
-                He's just some alum from years ago recruting for some random company!"
+                He's just some alum from years ago recruiting for some random company!"
 
                 Which is totally reasonable. I don't expect you to just take my word
                 on this stuff. Instead, listen to my arguments and see if you're convinced.
@@ -555,8 +612,42 @@ public void sendHttpRequest(Request request) {
         </section>
 
         <section>
+            <h2>Beware of tech debt</h2>
+            <p>Your code lives longer than 3 months!</p>
+            <aside class="notes">
+                Throughout college and past tech internships you may have had, you likely have never worked in the
+                same body of code for longer than 3 months. In the process of writing said code, you likely cut a few
+                corners and used a few hacky workarounds to make something work for the sake of wrapping up a project.
+
+                Once you start working full-time, however, you're going to have to live with the consequences of these
+                kinds of shortcuts. When you take shortcuts to save yourself a few days of work, your best case scenario
+                is that you have to solve the problem later on. Your worst case scenario is you establish a pattern in
+                your codebase that other team members will then take to heart, and then a large section of logic may
+                become built on a flimsy foundation. It's almost always better to do it right the first time, rather
+                than punting responsibilities for later.
+            </aside>
+        </section>
+
+        <section>
+            <h2>Coffee, lunch, beer</h2>
+            <aside class="notes">
+                You will spend more time with your coworkers in an average week than most of your college friends. The
+                value you gain from getting to know them is immense not only on a personal level, but also on a career
+                level. These people can help mentor you about technical issues and design patterns, but also about the 
+                mistakes they've made in their careers, and how to navigate your own career best.
+
+                Don't be afraid to extend these sorts of meet-ups outside of your team! I have met with the CEO and
+                an engineering VP multiple times just to catch up on each other's lives, give mutual feedback, and
+                discuss careers. Getting to know lots of different perspectives throughout the corporate ladder can
+                only help your understanding of your company and career.
+            </aside>
+        </section>
+
+        <section>
             <h3>Pro tips summary:</h3>
             <ul>
+                <li>Go to lunch and happy hours with your coworkers</li>
+                <li>Beware of tech debt</li>
                 <li>Stay close to the business</li>
                 <li>Get real feedback</li>
                 <li>Learn tech that transfers</li>
